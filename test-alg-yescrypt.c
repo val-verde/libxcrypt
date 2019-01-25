@@ -38,7 +38,7 @@
 #define YESCRYPT_PROM 1
 #endif
 
-#undef  TEST_PBKDF2_SHA256
+#define TEST_PBKDF2_SHA256 SLOW_TESTS
 #define TEST_SCRYPT
 #define TEST_YESCRYPT_KDF
 #define TEST_YESCRYPT_ENCODING
@@ -51,7 +51,7 @@ static int retval = 0;
 #include <stdlib.h> /* for malloc() */
 #endif
 
-#ifdef TEST_PBKDF2_SHA256
+#if TEST_PBKDF2_SHA256
 #include <assert.h>
 
 #include "alg-sha256.h"
@@ -160,7 +160,7 @@ int main(void)
 
 	setvbuf(stdout, NULL, _IOLBF, 0);
 
-#ifdef TEST_PBKDF2_SHA256
+#if TEST_PBKDF2_SHA256
 	print_PBKDF2_SHA256("password", "salt", 1, 20);
 	print_PBKDF2_SHA256("password", "salt", 2, 20);
 	print_PBKDF2_SHA256("password", "salt", 4096, 20);
@@ -168,7 +168,7 @@ int main(void)
 	print_PBKDF2_SHA256("passwordPASSWORDpassword",
 	    "saltSALTsaltSALTsaltSALTsaltSALTsalt", 4096, 25);
 	print_PBKDF2_SHA256_raw("pass\0word", 9, "sa\0lt", 5, 4096, 16);
-#if 0
+#if SLOW_TESTS
 	print_PBKDF2_SHA256("password", "salt", 1, 32);
 	print_PBKDF2_SHA256("password", "salt", 2, 32);
 	print_PBKDF2_SHA256("password", "salt", 4096, 32);

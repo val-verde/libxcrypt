@@ -132,7 +132,7 @@ struct pbkdf2_hmac_sha256_test pbkdf2_hmac_sha256_tests[] = {
     "\xc5\xe4\x78\xd5\x92\x88\xc8\x41\xaa\x53\x0d\xb6\x84\x5c\x4c\x8d"
     "\x96\x28\x93\xa0\x01\xce\x4e\x11\xa4\x96\x38\x73\xaa\x98\x13\x4a"
   },
-#ifdef SLOW_TESTS
+#if SLOW_TESTS
   /* With this test vector included, the program takes 40 seconds to run
      to completion on a 2017-generation x86.  Without, half a second.  */
   { "password", "salt", 8, 4, 16777216, 32,

@@ -342,16 +342,30 @@ AC_ARG_ENABLE([hashes],
       $SED -e 'y!ABCDEFGHIJKLMNOPQRSTUVWXYZ-!abcdefghijklmnopqrstuvwxyz_!'`"],
     [hashes_selected=all]
 )
+
 # This code must run after AC_PROG_AWK.
 hashes_enabled=$(
     $AWK -f ${srcdir}/sel-hashes.awk -v SELECTED_HASHES="$hashes_selected" \
             ${srcdir}/hashes.lst
 )
+
 if test x"$hashes_enabled" = x || test x"$hashes_enabled" = x,; then
     AC_MSG_ERROR([bad value '${hashes_selected}' for --enable-hashes])
 fi
 AC_SUBST([hashes_enabled])
 
+AC_ARG_ENABLE([slow-tests],
+    AS_HELP_STRING(
+        [--enable-slow-tests[=ARG]],
+        [If set to "yes", this option enables some slow tests during
+         the testsuite. [default=no]]
+    ),
+    [case "$enableval" in
+      yes) enable_slow_tests=1;;
+       no) enable_slow_tests=0;;
+        *) AC_MSG_ERROR([bad value ${enableval} for --enable-slow-tests]);;
+     esac],
+    [enable_slow_tests=0])
 
 # If the traditional DES hash is disabled, then the obsolete APIs are
 # implicitly disabled, except when stubs are requested.
@@ -380,6 +394,10 @@ fi
 AC_DEFINE_UNQUOTED([ENABLE_OBSOLETE_API_ENOSYS], [$enable_obsolete_api_enosys],
   [Define to 1 if fcrypt, encrypt{,_r}, setkey{,_r} should set errno to ENOSYS,
    or 0 if they should perform real operations.])
+
+# Export the value for SLOW_TESTS.
+AC_DEFINE_UNQUOTED([SLOW_TESTS], [$enable_slow_tests],
+  [Define to 1 if the slow tests should be run, or 0 if not.])
 
 # The obsolete APIs are unconditionally excluded from the static library,
 # so if we are not building the shared library, we are effectively not
