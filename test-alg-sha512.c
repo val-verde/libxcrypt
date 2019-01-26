@@ -156,6 +156,27 @@ main (void)
       result = 1;
     }
 
+#if SLOW_TESTS
+  /* This extremely long test is from the SHA-3 Candidate Algorithm
+     Submissions document.  */
+  static const char *buf2 =
+    "abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmno";
+  SHA512_Init (&ctx);
+  for (i = 0; i < 16777216; ++i)
+    SHA512_Update (&ctx, buf2, strlen (buf2));
+  SHA512_Final (sum, &ctx);
+  static const char expected2[64] =
+    "\xb4\x7c\x93\x34\x21\xea\x2d\xb1\x49\xad\x6e\x10\xfc\xe6\xc7\xf9"
+    "\x3d\x07\x52\x38\x01\x80\xff\xd7\xf4\x62\x9a\x71\x21\x34\x83\x1d"
+    "\x77\xbe\x60\x91\xb8\x19\xed\x35\x2c\x29\x67\xa2\xe2\xd4\xfa\x50"
+    "\x50\x72\x3c\x96\x30\x69\x1f\x1a\x05\xa7\x28\x1d\xbe\x6c\x10\x86";
+  if (memcmp (expected2, sum, 64) != 0)
+    {
+      report_failure (cnt, "block by block (long)", expected, sum);
+      result = 1;
+    }
+#endif
+
   return result;
 }
 
