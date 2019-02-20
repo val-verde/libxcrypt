@@ -41,6 +41,7 @@ travis_jigger () {
     # by travis_wait.
     sleep 3600
 }
+
 travis_wait () {
     local timeout="${1}"
     if [[ "${timeout}" =~ ^[0-9]+$ ]]; then
@@ -78,9 +79,6 @@ travis_wait () {
     return "$result"
 }
 
-
-export NPROCS="$((`nproc --all 2>/dev/null || sysctl -n hw.ncpu` * 2))"
-echo paralleism is $NPROCS
 
 if [[ "$PERFORM_COVERITY_SCAN" == "1" ]]; then
   TAG_VERSION="`echo ${TRAVIS_BRANCH} | sed -e 's/^v//g'`"
@@ -126,13 +124,13 @@ log_time preparation
 log_time configure
 
 if [[ "$DISTCHECK" == "1" ]]; then
-  make -j$NPROCS $MAKE_ARGS distcheck
+  make -O -j distcheck
   log_time distcheck
 else
-  make -j$NPROCS $MAKE_ARGS all
+  make -O -j $MAKE_ARGS all
   log_time build
   travis_wait 60 \
-  make -j$NPROCS $MAKE_ARGS check || (cat test-suite.log && exit 1)
+  make -O -j $MAKE_ARGS check || (cat test-suite.log && exit 1)
   log_time test
 fi
 
@@ -141,7 +139,7 @@ if [[ "$VALGRIND" == "1" ]]; then
   # Travis no-output timeout on individual tests, just because
   # that's how slow some valgrind checks are.
   travis_wait 60 \
-    make -j$NPROCS $MAKE_ARGS check-valgrind || \
+    make -O -j $MAKE_ARGS check-valgrind || \
     (for l in test-suite-*.log; do echo "${l}:"; cat $l; done && exit 1)
   log_time test-memcheck
 fi
