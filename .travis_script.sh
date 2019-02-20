@@ -139,10 +139,10 @@ fi
 if [[ "$VALGRIND" == "1" ]]; then
   # This step can take considerably longer than the default
   # Travis no-output timeout on individual tests, just because
-  # that's how slow memcheck is.
+  # that's how slow some valgrind checks are.
   travis_wait 60 \
-    make -j$NPROCS $MAKE_ARGS check-valgrind-memcheck || \
-    (cat test-suite-memcheck.log && exit 1)
+    make -j$NPROCS $MAKE_ARGS check-valgrind || \
+    (for l in test-suite-*.log; do echo "${l}:"; cat $l; done && exit 1)
   log_time test-memcheck
 fi
 

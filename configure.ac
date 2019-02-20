@@ -70,7 +70,13 @@ AC_CACHE_CHECK([whether the preprocessor ($CPP) supports -dD],
 AM_CONDITIONAL([HAVE_CPP_dD], [test $ac_cv_prog_cc_dD = yes])
 
 # Checks for libraries.
-AX_PTHREAD
+ENABLE_VALGRIND_PTHREAD="off"
+AX_PTHREAD(
+  [ENABLE_VALGRIND_PTHREAD="on";
+  AC_DEFINE([HAVE_PTHREAD], [1],
+    [Define if you have POSIX threads libraries and header files.])
+])
+
 # Automake+Libtool don't support PTHREAD_CC being used for some but
 # not all programs.
 if test x"$PTHREAD_CC" != x"$CC"; then
@@ -228,9 +234,9 @@ AC_CHECK_FUNCS_ONCE([
 ])
 
 # Disable valgrind tools for checking multithreaded
-# programs, as we don't use them in checks.
-AX_VALGRIND_DFLT([drd], [off])
-AX_VALGRIND_DFLT([helgrind], [off])
+# programs, if we do not have pthreads.
+AX_VALGRIND_DFLT([drd], [$ENABLE_VALGRIND_PTHREAD])
+AX_VALGRIND_DFLT([helgrind], [$ENABLE_VALGRIND_PTHREAD])
 
 # Valgrind's sgcheck is b0rk3n upstream.
 AX_VALGRIND_DFLT([sgcheck], [off])
