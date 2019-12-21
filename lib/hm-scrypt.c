@@ -116,25 +116,6 @@ encode64 (uint8_t * dst, ssize_t dstlen,
   return dst;
 }
 
-static uint32_t
-N2log2 (uint64_t N)
-{
-  uint32_t N_log2;
-
-  if (N < 2)
-    return 0;
-
-  N_log2 = 2;
-  while (N >> N_log2 != 0)
-    N_log2++;
-  N_log2--;
-
-  if (N >> N_log2 != 1)
-    return 0;
-
-  return N_log2;
-}
-
 /*
  * Wrapper for crypt_yescrypt_rn to compute the hash.
  */

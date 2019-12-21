@@ -565,7 +565,7 @@ out:
 	return retval;
 }
 
-static uint32_t N2log2(uint64_t N)
+uint32_t N2log2(uint64_t N)
 {
 	uint32_t N_log2;
 

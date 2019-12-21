@@ -123,4 +123,13 @@ extern const unsigned char ascii64[65];
 extern void
 make_failure_token (const char *setting, char *output, int size);
 
+/* Prototype for the N2log2 function defined in <alg-yescrypt-common.c>.
+   It is needed for builds, that enable scrypt and/or (gost-)yescrypt.  */
+#if (defined(INCLUDE_yescrypt)      && INCLUDE_yescrypt)      || \
+    (defined(INCLUDE_scrypt)        && INCLUDE_scrypt)        || \
+    (defined(INCLUDE_gost_yescrypt) && INCLUDE_gost_yescrypt)
+extern uint32_t
+N2log2 (uint64_t N);
+#endif
+
 #endif /* crypt-internal.h */
