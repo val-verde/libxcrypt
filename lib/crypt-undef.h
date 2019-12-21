@@ -30,6 +30,10 @@
 #undef H
 #endif
 
+#ifdef PAD
+#undef PAD
+#endif
+
 #ifdef RNDr
 #undef RNDr
 #endif

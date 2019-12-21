@@ -36,6 +36,9 @@
 
 #include "alg-sha256.h"
 
+/* Avoid clashes */
+#define PAD PAD_SHA256
+
 #ifdef __ICC
 /* Miscompile with icc 14.0.0 (at least), so don't use restrict there */
 #define restrict

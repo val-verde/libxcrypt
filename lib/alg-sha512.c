@@ -35,6 +35,8 @@
 #include "crypt-byteorder.h"
 #include "alg-sha512.h"
 
+/* Avoid clashes */
+#define PAD PAD_SHA512
 
 #if XCRYPT_USE_BIGENDIAN
 /* Copy a vector of big-endian uint64_t into a vector of bytes */
