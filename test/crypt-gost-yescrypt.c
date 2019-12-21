@@ -26,11 +26,26 @@
 
 #include <stdio.h>
 
+#ifdef crypt_gost_yescrypt_rn
+#undef crypt_gost_yescrypt_rn
+#endif
+
+#define _test_gost_yescrypt      1
+#define crypt_gost_yescrypt_rn   test_crypt_gost_yescrypt_rn
+#define outer_gost_hmac256       test_outer_hmac
+
 /* redefine outer hmac to this function to test entropy bypass */
 static void
 test_outer_hmac (const uint8_t *k, size_t n, const uint8_t *t, size_t len,
                  uint8_t *out32, gost_hmac_256_t *gostbuf);
-#define outer_gost_hmac256 test_outer_hmac
+
+/* forward declaration for renaming  */
+void
+crypt_gost_yescrypt_rn (const char *phrase, size_t phr_size,
+                        const char *setting, size_t set_size,
+                        uint8_t *output, size_t o_size,
+                        void *scratch, size_t s_size);
+
 #include "../lib/hm-gost-yescrypt.c"
 
 static int test_mode = 0;

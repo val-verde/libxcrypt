@@ -52,6 +52,7 @@ typedef struct
 static_assert (sizeof (crypt_gost_yescrypt_internal_t) <= ALG_SPECIFIC_SIZE,
                "ALG_SPECIFIC_SIZE is too small for GOST-YESCRYPT.");
 
+#ifndef _test_gost_yescrypt
 /*
  * As OUTPUT is initialized with a failure token before gensalt_yescrypt_rn
  * is called, in case of an error we could just set an appropriate errno
@@ -83,6 +84,7 @@ gensalt_gost_yescrypt_rn (unsigned long count,
   /* Insert the gost marker.  */
   output[1] = 'g';
 }
+#endif
 
 void
 crypt_gost_yescrypt_rn (const char *phrase, size_t phr_size,
