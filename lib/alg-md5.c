@@ -44,6 +44,9 @@
 #include "crypt-internal.h"
 #include "alg-md5.h"
 
+/* Avoid clashes */
+#define body body_md5
+
 /*
  * The basic MD5 functions.
  *

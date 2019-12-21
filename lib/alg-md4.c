@@ -44,6 +44,9 @@
 #include "crypt-internal.h"
 #include "alg-md4.h"
 
+/* Avoid clashes */
+#define body body_md4
+
 /*
  * The basic MD4 functions.
  *

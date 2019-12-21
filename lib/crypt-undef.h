@@ -22,6 +22,10 @@
    within the same source file are valid and are likely to be intentional,
    e.g. when performing a unity build.  */
 
+#ifdef body
+#undef body
+#endif
+
 #ifdef G
 #undef G
 #endif
