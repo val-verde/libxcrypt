@@ -37,6 +37,7 @@
 
 #include "crypt-port.h"
 #include "crypt-hashes.h"
+#include "crypt-undef.h"
 
 #if INCLUDE_nt
 

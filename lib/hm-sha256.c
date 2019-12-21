@@ -22,6 +22,7 @@
 
 #include "crypt.h"
 #include "crypt-internal.h"
+#include "crypt-undef.h"
 #include "alg-sha256.h"
 
 #include <errno.h>

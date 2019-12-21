@@ -24,6 +24,7 @@
 
 #include "crypt.h"
 #include "crypt-internal.h"
+#include "crypt-undef.h"
 #include "alg-md5.h"
 
 #include <errno.h>

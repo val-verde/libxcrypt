@@ -27,6 +27,7 @@
 
 #include "crypt-port.h"
 #include "crypt-hashes.h"
+#include "crypt-undef.h"
 
 #if INCLUDE_gost_yescrypt || INCLUDE_yescrypt || INCLUDE_scrypt || INCLUDE_sha256crypt
 
