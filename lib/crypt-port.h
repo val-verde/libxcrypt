@@ -46,6 +46,16 @@
 #include <sys/param.h>
 #endif
 
+/* <crypt-wrap-unistd.h> must be included here for unity
+   builds, as this header file is always included before
+   <crypt-symbol-vers.h> in all source files.
+
+   During regular builds we want <unistd.h> only included
+   in those source files, which really need it.  */
+#ifdef HAVE_MESON_UNITY_BUILD
+#include <crypt-wrap-unistd.h>
+#endif
+
 #ifndef HAVE_SYS_CDEFS_THROW
 #define __THROW /* nothing */
 #endif

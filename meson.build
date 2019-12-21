@@ -95,6 +95,11 @@ subdir('scripts')
 # Everything in here will be made available via crypt-config.h.
 cdata = configuration_data()
 
+# Define a preprocessor macro to detect unity build.
+if meson.is_unity()
+  cdata.set('HAVE_MESON_UNITY_BUILD', 1)
+endif
+
 # Compiler switches to be used when compiling probe programs.
 # Caution: putting something in this array does NOT arrange for it to
 # be used during the build.
@@ -262,6 +267,12 @@ if cc_syntax == 'gcc'
   # then we'll try to use them anyway, and we'll get junk warnings about them
   # for every file in the build.  But GCC rejects the option that makes Clang
   # do this, so we have to test for *it* first.
+  warn_args = []
+
+  if cc.has_argument('-Werror')
+    warn_args += '-Werror'
+  endif
+
   need_werror_unknown_option = cc.has_argument('-Werror=unknown-warning-option')
 
   candidate_warnings = [
@@ -277,9 +288,11 @@ if cc_syntax == 'gcc'
     '-Wformat-signedness',
     '-Wformat-truncation=1',
     '-Wlogical-op',
+    '-Wmissing-attributes',
     '-Wmissing-declarations',
     '-Wmissing-prototypes',
     '-Wnested-externs',
+    '-Wnonnull',
     '-Wnull-dereference',
     '-Wold-style-definition',
     '-Wpointer-arith',
@@ -311,6 +324,7 @@ if cc_syntax == 'gcc'
     endif
     if ok
       add_project_arguments(w, language: 'c')
+      warn_args += w
     endif
   endforeach
 
@@ -437,6 +451,7 @@ endforeach
 needed_headers = [
   'endian.h',
   'fcntl.h',
+  'features.h',
   'sys/cdefs.h',
   'sys/endian.h',
   'sys/param.h',
@@ -453,6 +468,39 @@ foreach h : needed_headers
     cflags_for_probe += (_D + m + '=1')
   endif
 endforeach
+
+# Testing whether a prototype definition for the crypt() function
+# is present in <unistd.h> and whether it is compatible with our
+# own prototype, which accepts NULL to be passed as function parameters.
+crypt_proto_test = '''
+#include <unistd.h>
+
+int main(void) {
+  char* a = crypt("..","..");
+  return 0;
+}
+'''
+
+crypt_bad_proto_test = '''
+#include <unistd.h>
+
+int main(void) {
+  char* a = crypt(NULL,NULL);
+  return 0;
+}
+'''
+
+if cdata.has('HAVE_UNISTD_H')
+  if cc.compiles(crypt_proto_test,
+                 name: 'Test <unistd.h> declares a prototype for crypt()',
+                 args: warn_args + cflags_for_probe)
+    if not cc.compiles(crypt_bad_proto_test,
+                       name: 'Test <unistd.h> declares a compatbile prototype for crypt()',
+                       args: warn_args + cflags_for_probe)
+      cdata.set('HAVE_INCOMPATIBLE_CRYPT_PROTOTYPE_IN_UNISTD_H', 1)
+    endif
+  endif
+endif
 
 # Probe for C library functions.  Project policy is that functions may
 # only be used unconditionally if they are required to be present in a
