@@ -186,6 +186,13 @@ def do_normal_build(E, NPROCS):
         # overall timeout.
         test_timeout = 40 * 60
 
+    # Enable unity builds for each configuration except when running
+    # valgrind tests or sanitizer builds.
+    if E.get("VALGRIND", "") != "1" and E.get("SANITIZER", "") != "1":
+        meson_cmd.append("-Dunity=on")
+    else:
+        meson_cmd.append("-Dunity=off")
+
     meson_cmd.extend(shlex.split(E.get("CONF", "")))
     if "-Dwerror=false" not in meson_cmd:
         meson_cmd.append("-Dwerror=true")
@@ -224,7 +231,7 @@ def do_coverity_build(E, NPROCS):
     # other environment variables expected by the coverity driver script
     E["COVERITY_SCAN_PROJECT_NAME"] = E["TRAVIS_REPO_SLUG"]
     E["COVERITY_SCAN_BUILD_COMMAND_PREPEND"] = \
-        "meson {} . build/".format(E.get("CONF", ""))
+        "meson -Dunity=off {} . build/".format(E.get("CONF", ""))
     E["COVERITY_SCAN_BUILD_COMMAND"] = \
         "ninja -C build/ -j{} -v".format(NPROCS)
 
