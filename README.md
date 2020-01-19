@@ -85,13 +85,15 @@ Run `man -l doc/crypt.5` for more detail on the hashing algorithms
 that can be enabled or disabled by `-Dhashes`.  You can do this
 immediately after unpacking the source.
 
-libxcrypt currently cannot be compiled with any sort of cross-file
-optimization; the build will fail if you use either `-Db_lto=true` or
-`--unity on`.  This is because of missing compiler features; see
-[GCC bug 48200][1] for specifics.  (The situation is known to be
-the same for LLVM and icc as well as GCC.  We have not tried
-building this library with any other compiler, but we expect
-it is the same for them as well.)
+Invoking “meson” with `--unity on` or `-Dunity=on` will enable
+cross-file build-time optimization.
+
+libxcrypt currently cannot be compiled with link-time optimization;
+the build will fail if you use either `-Db_lto=true`.  This is because
+of missing compiler features; see [GCC bug 48200][1] for specifics.
+(The situation is known to be the same for LLVM and icc as well as GCC.
+We have not tried building this library with any other compiler, but we
+expect it is the same for them as well.)
 
 [1]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=48200
 
