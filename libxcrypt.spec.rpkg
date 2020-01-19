@@ -134,7 +134,7 @@
 # Common configuration options for the shared library.
 %global meson_config_shared \\\
   -Ddefault_library=shared  \\\
-  -Dunity=off
+  -Dunity=on
 
 
 # Common configuration options for the system library
