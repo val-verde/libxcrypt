@@ -77,9 +77,9 @@ crypt_gensalt_internal (const char *prefix, unsigned long count,
       nrbytes = internal_nrbytes = h->nrbytes;
     }
 
-  h->gensalt (count,
-              (const unsigned char *)rbytes, (size_t)nrbytes,
-              (unsigned char *)output, (size_t)output_size);
+  h->gensalt_fn (count,
+                 (const unsigned char *)rbytes, (size_t)nrbytes,
+                 (unsigned char *)output, (size_t)output_size);
 
   if (internal_nrbytes)
     secure_erase (internal_rbytes, internal_nrbytes);

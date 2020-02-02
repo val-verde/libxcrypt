@@ -74,8 +74,8 @@ struct hashfn
 {
   const char *prefix;
   size_t plen;
-  crypt_fn crypt;
-  gensalt_fn gensalt;
+  crypt_fn crypt_fn;
+  gensalt_fn gensalt_fn;
   /* The type of this field is unsigned char to ensure that it cannot
      be set larger than the size of an internal buffer in crypt_gensalt_rn.  */
   unsigned char nrbytes;

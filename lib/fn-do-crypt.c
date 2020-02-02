@@ -78,9 +78,9 @@ do_crypt (const char *phrase, const char *setting, struct crypt_data *data)
     }
 
   struct crypt_internal *cint = get_internal (data);
-  h->crypt (phrase, phr_size, setting, set_size,
-            (unsigned char *)data->output, sizeof data->output,
-            cint->alg_specific, sizeof cint->alg_specific);
+  h->crypt_fn (phrase, phr_size, setting, set_size,
+               (unsigned char *)data->output, sizeof data->output,
+               cint->alg_specific, sizeof cint->alg_specific);
 
   secure_erase (data->internal, sizeof data->internal);
 }
