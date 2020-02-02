@@ -99,11 +99,20 @@ foreach t : [
 ]
   name = t[0]
   add_objs = t[1]
+  link_objs = ''
+
+  # In unity builds we cannot extract single objects.
+  if meson.is_unity()
+    link_objs = libcrypt_internal.extract_all_objects(recursive: true)
+  else
+    link_objs = libcrypt_internal.extract_objects(add_objs)
+  endif
+
   test(name, executable(
     name,
     sources: [name + '.c'],
     dependencies: [libcrypt_dep],
-    objects: libcrypt_internal.extract_objects(add_objs),
+    objects: link_objs,
     build_by_default: false,
     install: false,
   ))
@@ -125,11 +134,21 @@ getrandom_fallbacks_LDFLAGS = [
 else
 getrandom_fallbacks_LDFLAGS = []
 endif
+
+link_objs = ''
+
+# In unity builds we cannot extract single objects.
+if meson.is_unity()
+  link_objs = libcrypt_internal.extract_all_objects(recursive: true)
+else
+  link_objs = libcrypt_internal.extract_objects('fn-randombytes.c')
+endif
+
 test('getrandom-fallbacks',
      executable('getrandom-fallbacks',
                 sources: ['getrandom-fallbacks.c'],
                 dependencies: [libcrypt_dep],
-                objects: libcrypt_internal.extract_objects('fn-randombytes.c'),
+                objects: link_objs,
                 include_directories: [I_config_h, I_lib],
                 link_args: getrandom_fallbacks_LDFLAGS,
                 build_by_default: false,
