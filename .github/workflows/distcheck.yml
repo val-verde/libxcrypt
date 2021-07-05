@@ -31,23 +31,31 @@ jobs:
 
     strategy:
       fail-fast: false
-      matrix:
-        compiler: [gcc, clang]
 
     env:
-      CC: ${{matrix.compiler}}
       VERBOSE: 1
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Install packages
+      # The distcheck build is run with the oldest version of perl we support,
+      # in order to verify that we still support it.
+    - name: Install Perl 5.14
+      uses: shogo82148/actions-setup-perl@v1
+      with:
+        perl-version: '5.14'
+      # 'make distcheck' runs perlcritic on all our Perl code.
+      # Install perlcritic, perltidy, and several extra perlcritic checks.
+      # (n.b. perlcritic and perltidy have apt packages, but the extra
+      # checks don't.)
+    - name: Install perlcritic and perltidy
       run: |
-        needed=libperl-critic-perl
-        if [ "$CC" = clang ]; then
-          needed="clang $needed"
-        fi
-        sudo apt-get install $needed
+        cpanm -S -i \
+          Perl::Critic \
+          Perl::Critic::Freenode \
+          Perl::Critic::Pulp \
+          Perl::Critic::TooMuchCode \
+          Perl::Tidy
     - name: Versions of build tools
       run: ./build-aux/ci-log-dependency-versions
     - name: Bootstrap
