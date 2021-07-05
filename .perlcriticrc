@@ -1,5 +1,4 @@
-
-# Perl::Critic configuration.  -*- conf-mode -*-
+# Perl::Critic configuration.  -*- conf -*-
 
 # we turn on all of the policies at theme level, and then
 # we turn off one-by-one the ones I don't like below.
@@ -65,14 +64,15 @@ allow = experimental::smartmatch experimental::re_strict
 [-ValuesAndExpressions::ProhibitFiletest_f]
 
 # FindBin works fine for our purposes, and we can't use CPAN modules.
-# There is no option to ignore use of just one module.
-[-Freenode::DiscouragedModules]
+# There is no option to ignore use of just one module
+# (https://github.com/Grinnz/Perl-Critic-Community/issues/42)
+[-Community::DiscouragedModules]
 
 # Style rules I don't agree with.
 [-ControlStructures::ProhibitPostfixControls]
-[-Freenode::Each]
-[-Freenode::Wantarray]
-[-Freenode::WhileDiamondDefaultAssignment]
+[-Community::Each]
+[-Community::Wantarray]
+[-Community::WhileDiamondDefaultAssignment]
 [-NamingConventions::Capitalization]
 [-RegularExpressions::ProhibitEnumeratedClasses]
 [-RegularExpressions::ProhibitEscapedMetacharacters]
@@ -84,16 +84,45 @@ allow = experimental::smartmatch experimental::re_strict
 [-ValuesAndExpressions::ProhibitNoisyQuotes]
 [-Variables::ProhibitPunctuationVars]
 
-# Freenode:: modules that duplicate core and pulp perlcritic modules.
+# Community:: modules that duplicate core and pulp perlcritic modules.
+[-Community::AmpersandSubCalls]
+[-Community::ArrayAssignAref]
+[-Community::BarewordFilehandles]
+[-Community::ConditionalDeclarations]
+[-Community::IndirectObjectNotation]
+[-Community::LexicalForeachIterator]
+[-Community::LoopOnHash]
+[-Community::OpenArgs]
+[-Community::PackageMatchesFilename]
+[-Community::POSIXImports]
+[-Community::Prototypes]
+[-Community::StrictWarnings]
+
+# Disable all of the Freenode:: backward compatibility aliases.
+# See https://github.com/Grinnz/Perl-Critic-Community/issues/41
 [-Freenode::AmpersandSubCalls]
 [-Freenode::ArrayAssignAref]
 [-Freenode::BarewordFilehandles]
 [-Freenode::ConditionalDeclarations]
+[-Freenode::ConditionalImplicitReturn]
+[-Freenode::DeprecatedFeatures]
+[-Freenode::DiscouragedModules]
+[-Freenode::DollarAB]
+[-Freenode::Each]
+[-Freenode::EmptyReturn]
 [-Freenode::IndirectObjectNotation]
 [-Freenode::LexicalForeachIterator]
 [-Freenode::LoopOnHash]
+[-Freenode::ModPerl]
+[-Freenode::MultidimensionalArrayEmulation]
 [-Freenode::OpenArgs]
-[-Freenode::PackageMatchesFilename]
+[-Freenode::OverloadOptions]
 [-Freenode::POSIXImports]
+[-Freenode::PackageMatchesFilename]
+[-Freenode::PreferredAlternatives]
 [-Freenode::Prototypes]
 [-Freenode::StrictWarnings]
+[-Freenode::Threads]
+[-Freenode::Wantarray]
+[-Freenode::WarningsSwitch]
+[-Freenode::WhileDiamondDefaultAssignment]

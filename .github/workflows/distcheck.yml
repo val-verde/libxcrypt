@@ -52,7 +52,7 @@ jobs:
       run: |
         cpanm -S -i \
           Perl::Critic \
-          Perl::Critic::Freenode \
+          Perl::Critic::Community \
           Perl::Critic::Pulp \
           Perl::Critic::TooMuchCode \
           Perl::Tidy
