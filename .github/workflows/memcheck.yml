@@ -40,9 +40,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Install packages
-      run: sudo apt-get install clang valgrind
-    - name: Compiler version
-      run: ${{matrix.compiler}} --version
+      run: |
+        needed=valgrind
+        if [ "$CC" = clang ]; then
+          needed="clang $needed"
+        fi
+        sudo apt-get install $needed
+    - name: Versions of build tools
+      run: ./build-aux/ci-log-dependency-versions
     - name: Bootstrap
       run: ./autogen.sh
     - name: Configure
