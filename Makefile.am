@@ -595,7 +595,7 @@ endif
 # Additional checks to run in `make distcheck'.
 distcheck-hook:
 	cd $(top_srcdir) && \
-	  ./build-aux/check-perlcritic-config && \
+	  $(PERL) ./build-aux/check-perlcritic-config && \
 	  perlcritic ./
 
 # Every object file depends on crypt-symbol-vers.h and crypt-hashes.h,
