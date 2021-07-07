@@ -52,7 +52,7 @@ jobs:
       # updates to these tools.
     - name: Install perlcritic and perltidy
       run: |
-        cpanm -S -i \
+        cpanm -S -M https://cpan.metacpan.org/ -i \
           Perl::Critic@1.140 \
           Perl::Critic::Community@1.0.0 \
           Perl::Critic::Pulp@99 \
