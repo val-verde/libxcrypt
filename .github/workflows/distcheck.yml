@@ -45,17 +45,19 @@ jobs:
       with:
         perl-version: '5.14'
       # 'make distcheck' runs perlcritic on all our Perl code.
-      # Install perlcritic, perltidy, and several extra perlcritic checks.
-      # (n.b. perlcritic and perltidy have apt packages, but the extra
-      # checks don't.)
+      # Install perlcritic, perltidy, and several extra perlcritic
+      # checks.  We pin exact versions of all these to ensure test
+      # stability.  Upgrades of Perl::Critic and Perl::Tidy, in
+      # particular, should happen in sync with Linux distributions'
+      # updates to these tools.
     - name: Install perlcritic and perltidy
       run: |
         cpanm -S -i \
-          Perl::Critic \
-          Perl::Critic::Community \
-          Perl::Critic::Pulp \
-          Perl::Critic::TooMuchCode \
-          Perl::Tidy
+          Perl::Critic@1.140 \
+          Perl::Critic::Community@1.0.0 \
+          Perl::Critic::Pulp@99 \
+          Perl::Critic::TooMuchCode@0.15 \
+          Perl::Tidy@20210402
     - name: Versions of build tools
       run: ./build-aux/ci-log-dependency-versions
     - name: Bootstrap
